@@ -21,7 +21,7 @@ GridReset(Cell[][] grid)
 
 Displays grid object. 
 ```java
-DisplayGrid(Cell[][] grid)
+GridDisplay(Cell[][] grid)
 ```
 ---
 
@@ -31,14 +31,24 @@ GridUpdate(Player player, Cell[][] grid, int row, int col)
 ```
 ---
 
-Checks grid object `STATE_CELL`. 
+Checks grid object `STATE_CELL`. Determines a winner. 
+```java
+IsWinner(Cell[][] grid, Player player)
+```
+
+Checks grid object `STATE_CELL`. Determines if move is valid. 
 ```java
 IsValidMove(Cell[][] grid, int row, int col)
 ```
 
 ## Player
 ### Purpose
-x
+Store player type, playing character, and score. Creating a new board instance creates a composite object taking 2 parameters which initializes a Player object containing the type, character, and score (initialized to 0). In essence, this allows us to create many player instances, without the need for two instances of the same thing i.e the user player and the agent player will always have the same properties, where the agent might just have different functionality. 
+
+```java
+Player minP = new Player(Player.PosType.MIN, 'O');
+Player maxP = new Player(Player.PosType.MAX, 'X');
+```
 
 ---
 
@@ -51,28 +61,9 @@ x
 }
 ```
 
-
-## Move
-### Purpose
-x
-
----
-
-
-```java
-Move<P, G>
-{
-  P player
-  G grid
-  int x
-  int y
-}
-```
-
-
 ## Cell
 ### Purpose
-x
+Contains a `Player` class object type `PosType`, as well as the type of character it is associated with. This is useful for any functionality that will require more abstract use cases i.e the backtracking algorithm. Overall, the `Cell` class is used to create an abstraction for the board elements. 
 
 ---
 
@@ -80,7 +71,6 @@ x
 ```java
 {
   Player.PosType STATE_CELL
-  int TURN_N
   char CHAR_CELL
 }
 ```
