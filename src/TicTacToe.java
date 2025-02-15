@@ -8,12 +8,9 @@ public class TicTacToe
     private static void print() { System.out.println(); }
     private static void print(String str) { System.out.print(str); }
 
-    public static void Entry(Board board, Player minP, Player maxP)
+    public static void Entry(Player minP, Player maxP)
     {
-        Scanner read;
         Random rand = new Random();
-
-        Cell[][] grid = board.getGrid();
 
         int userInput = 2;
 
@@ -21,7 +18,7 @@ public class TicTacToe
 
         print("Welcome to TicTacToe!\nHeads (1) or Tails (0) to play first?");
 
-        read = new Scanner(System.in);
+        Scanner read = new Scanner(System.in);
 
         do
         {
@@ -43,28 +40,28 @@ public class TicTacToe
             {
                 case 0:
                     print("you're playing ");
-                    if (!coin)
-                    {
-                        println(minP.getChar() + "...\n");
-                        Game(minP, maxP, grid, true);
-                    }
-                    else
+                    if (!coin) // 0, 0 -> max
                     {
                         println(maxP.getChar() + "...\n");
-                        Game(maxP, minP, grid, false);
+                        Game(maxP, minP, true);
+                    }
+                    else // 0, 1 -> min
+                    {
+                        println(minP.getChar() + "...\n");
+                        Game(minP, maxP, false);
                     }
                     break;
                 case 1:
                     print("you're playing ");
-                    if (coin)
+                    if (coin) // 1, 1 -> max
                     {
                         print(maxP.getChar() + "...\n");
-                        Game(maxP, minP, grid, false);
+                        Game(maxP, minP, true);
                     }
-                    else
+                    else // 1, 0 -> min
                     {
                         print(minP.getChar() + "...\n");
-                        Game(minP, maxP, grid, true);
+                        Game(minP, maxP, false);
                     }
                     break;
                 default:
@@ -77,30 +74,73 @@ public class TicTacToe
         read.close();
     }
 
-    ///////////////////////////////////////////////////////////////////
-    //																 //
-    // Below is code containing the MINIMAX algorithm for both cases //
-    // when the agent player is the maximizing player and the 		 //
-    // minimizing player. Below code also handles logic for player 	 //
-    // turns respective to who is the maximizing player (X). 		 //
-    //																 //
-    ///////////////////////////////////////////////////////////////////
+    private static Board board = new Board();
+    private static Cell[][] grid = board.getGrid();
 
-    private static int minPScore;
-    private static int maxPScore;
-
-    private static int turnN;
-
-
-    private static boolean isWinner;
-
-    private static void Game(Player userP, Player agentP, Cell[][] grid, boolean isMax)
+    private static boolean AgentPlayerTurn(Player agent)
     {
-        if (isMax)
+        return false;
+    }
+
+    private static boolean UserPlayerTurn(Player player)
+    {
+        int userInput = -1;
+        int[][] coordinate = new int[1][2];
+
+        Scanner read = new Scanner(System.in);
+
+        coordinate[0][0] = userInput;
+        coordinate[0][1] = userInput;
+
+        print("Enter your move (1 - 9): ");
+        do
         {
+            do
+            {
+                try
+                {
+                    userInput = read.nextInt();
+                    read.nextLine();
+                }
+                catch (InputMismatchException e)
+                {
+                    println("Invalid input... You must enter a number between 1 and 9...");
+                }
+            }
+            while (userInput < 1 || userInput > 9);
 
+            coordinate = Board.GetCoordinate(userInput);
+
+            if (!Board.IsValidMove(grid, coordinate[0][0], coordinate[0][1]))
+            {
+                println("Invalid move... try again...");
+                Board.GridDisplay(grid);
+            }
         }
+        while (!Board.IsValidMove(grid, coordinate[0][0], coordinate[0][1]));
 
+        grid = Board.GridUpdate(player, grid, coordinate[0][0], coordinate[0][1]);
 
+        Board.GridDisplay(grid);
+
+        return Board.IsWinner(grid, player);
+    }
+
+    private static void Game(Player userP, Player agentP, boolean isMax)
+    {
+        boolean isWinner = false;
+
+        if (isMax) { isWinner = UserPlayerTurn(userP); }
+
+        isWinner = AgentPlayerTurn(agentP);
+
+        while (!isWinner)
+        {
+            isWinner = UserPlayerTurn(userP);
+            if (isWinner) { println("You win!");  break; }
+
+            isWinner = AgentPlayerTurn(agentP);
+            if (isWinner) { println("Agent player " + agentP.getChar() + " wins..."); break; }
+        }
     }
 }

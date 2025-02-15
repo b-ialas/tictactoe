@@ -1,14 +1,10 @@
 public class Board
 {
-    // board size
     private static final int SIZE = 3;
 
-    public int getSize() { return SIZE; }
-
-    private Cell[][] grid;
+    private final Cell[][] grid;
 
     public Cell[][] getGrid() { return grid; }
-    public void setGrid(Cell[][] newGrid) { this.grid = newGrid; }
 
     public Board()
     {
@@ -19,7 +15,20 @@ public class Board
     private static void print(String str) { System.out.print(str); }
     private static void print() { System.out.println(); }
 
-    public static void DisplayGrid(Cell[][] grid)
+    public static int[][] GetCoordinate(int cell)
+    {
+        int[][] coordinate = new int[1][2];
+
+        int row = (cell - 1) / 3;
+        int col = (cell - 1) % 3;
+
+        coordinate[0][0] = row;
+        coordinate[0][1] = col;
+
+        return coordinate;
+    }
+
+    public static void GridDisplay(Cell[][] grid)
     {
         for (int row = 0; row < SIZE; row++)
         {
@@ -49,7 +58,7 @@ public class Board
     {
         if (player.getType() == Player.PosType.MIN)
         {
-            grid[row][col].setState(Player.PosType.EMPTY);
+            grid[row][col].setState(player.getType());
             grid[row][col].setChar(player.getChar());
         }
 
@@ -62,6 +71,71 @@ public class Board
         grid[row][col].setChar(player.getChar());
 
         return grid;
+    }
+
+    public static boolean IsWinner(Cell[][] grid, Player player)
+    {
+        Player.PosType type = player.getType();
+
+        boolean isWin = true;
+
+        // check row
+        for (int row = 0; row < SIZE; row++)
+        {
+            isWin = true;
+            for (int col = 0; col < SIZE; col++)
+            {
+                if (grid[row][col].getState() != type)
+                {
+                    isWin = false;
+                    break;
+                }
+            }
+            if (isWin) { return isWin; }
+        }
+
+        isWin = true;
+
+        // check column
+        for (int col = 0; col < SIZE; col++)
+        {
+            isWin = true;
+            for (int row = 0; row < SIZE; row++)
+            {
+                if (grid[row][col].getState() != type)
+                {
+                    isWin = false;
+                    break;
+                }
+            }
+            if (isWin) { return isWin; }
+        }
+
+        isWin = true;
+
+        // check diagonal
+        for (int i = 0; i < SIZE; i++)
+        {
+            if (grid[i][i].getState() != type)
+            {
+                isWin = false;
+                break;
+            }
+        }
+
+        if (isWin) { return isWin; }
+        isWin = true;
+
+        for (int i = 0; i < SIZE; i++)
+        {
+            if (grid[i][SIZE - 1 - i].getState() != type)
+            {
+                isWin = false;
+                break;
+            }
+        }
+
+        return isWin;
     }
 
     public static boolean IsValidMove(Cell[][] grid, int row, int col)

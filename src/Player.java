@@ -1,4 +1,5 @@
-public class Player {
+public class Player
+{
     public enum PosType { EMPTY, MIN, MAX }
 
     private PosType TYPE;
@@ -16,7 +17,8 @@ public class Player {
     public char getChar() { return CHAR; }
     public void setChar(char newChar) { this.CHAR = newChar; }
 
-    public Player(PosType type, char character) {
+    public Player(PosType type, char character)
+    {
         this.TYPE = type;
         this.CHAR = character;
         this.SCORE = 0;
