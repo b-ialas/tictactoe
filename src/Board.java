@@ -12,9 +12,6 @@ public class Board
         GridReset(grid);
     }
 
-    private static void print(String str) { System.out.print(str); }
-    private static void print() { System.out.println(); }
-
     @Override
     public static int[][] GetCoordinate(int cell)
     {
