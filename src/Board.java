@@ -15,6 +15,7 @@ public class Board
     private static void print(String str) { System.out.print(str); }
     private static void print() { System.out.println(); }
 
+    @Override
     public static int[][] GetCoordinate(int cell)
     {
         int[][] coordinate = new int[1][2];
@@ -28,6 +29,7 @@ public class Board
         return coordinate;
     }
 
+    @Override
     public static void GridDisplay(Cell[][] grid)
     {
         for (int row = 0; row < SIZE; row++)
